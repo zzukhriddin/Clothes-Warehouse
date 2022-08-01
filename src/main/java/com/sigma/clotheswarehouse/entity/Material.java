@@ -21,4 +21,7 @@ import java.util.UUID;
 public class Material extends AbsEntity {
     @Column(nullable = false)
     private Double amount;
+
+    @Column(nullable = false)
+    private boolean deleted;
 }

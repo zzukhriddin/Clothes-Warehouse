@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -18,4 +19,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 public class Measurement extends AbsLong {
     private String name;
+
+    @Column(nullable = false)
+    private boolean deleted;
 }
