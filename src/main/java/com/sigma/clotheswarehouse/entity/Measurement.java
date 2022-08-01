@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Data
@@ -15,4 +16,7 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 public class Measurement extends AbsLong {
     private String name;
+
+    @Column(nullable = false)
+    private boolean deleted;
 }
