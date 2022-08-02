@@ -15,7 +15,7 @@ public class MeasurementMapper {
     private final MeasurementRepository measurementRepository;
 
 
-    public Measurement measurementDTOToMeasurement(MeasurementDTO measurementDTO) {
+    public Measurement generateMeasurementFromMeasurementDTO(MeasurementDTO measurementDTO) {
         Measurement measurement = new Measurement();
         Optional<Measurement> optionalMeasurement = measurementRepository.findByName(measurementDTO.getName());
         if (optionalMeasurement.isPresent())
@@ -24,5 +24,11 @@ public class MeasurementMapper {
 
         // Saving measurement
         return measurementRepository.save(measurement);
+    }
+
+    public MeasurementDTO generateMeasurementDTOFromMeasurement(Measurement measurement) {
+        MeasurementDTO measurementDTO = new MeasurementDTO();
+        measurementDTO.setName(measurement.getName());
+        return measurementDTO;
     }
 }

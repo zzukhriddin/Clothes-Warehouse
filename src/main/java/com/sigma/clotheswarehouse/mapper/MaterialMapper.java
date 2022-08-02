@@ -2,6 +2,7 @@ package com.sigma.clotheswarehouse.mapper;
 
 import com.sigma.clotheswarehouse.entity.Material;
 import com.sigma.clotheswarehouse.payload.IncomeMaterialDTO;
+import com.sigma.clotheswarehouse.payload.MaterialDTO;
 import com.sigma.clotheswarehouse.repository.MaterialRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,7 @@ public class MaterialMapper {
 
     private final MaterialRepository materialRepository;
 
-    public Material materialDTOToMaterial(IncomeMaterialDTO incomeMaterialDTO) {
+    public Material generateMaterialFromMaterialDTO(IncomeMaterialDTO incomeMaterialDTO) {
         Material material = new Material();
         Optional<Material> optionalMaterial = materialRepository.findByName(incomeMaterialDTO.getMaterialDTO().getName());
         if (optionalMaterial.isPresent()) {
@@ -26,5 +27,11 @@ public class MaterialMapper {
 
         // Saving material
         return materialRepository.save(material);
+    }
+
+    public MaterialDTO generateMaterialDTOFromMaterial(Material material) {
+        MaterialDTO materialDTO = new MaterialDTO();
+        materialDTO.setName(material.getName());
+        return materialDTO;
     }
 }
