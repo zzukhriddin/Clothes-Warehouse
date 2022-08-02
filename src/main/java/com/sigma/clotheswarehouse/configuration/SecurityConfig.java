@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -37,11 +38,23 @@ public class SecurityConfig {
     @Order(1)
     public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
         http
-                .antMatcher("/api/**")
+                .cors()
+                .and()
+                .csrf()
+                .disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .formLogin()
+                .disable()
+                .httpBasic()
+                .disable()
                 .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().hasRole("ADMIN")
-                )
-                .httpBasic(withDefaults());
+                        .antMatchers("/api/**")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated()
+                );
         return http.build();
     }
 
