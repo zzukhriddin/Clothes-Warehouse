@@ -8,7 +8,8 @@ import com.sigma.clotheswarehouse.mapper.IncomeMaterialMapper;
 import com.sigma.clotheswarehouse.mapper.MaterialMapper;
 import com.sigma.clotheswarehouse.mapper.MeasurementMapper;
 import com.sigma.clotheswarehouse.payload.ApiResponse;
-import com.sigma.clotheswarehouse.payload.IncomeMaterialDTO;
+import com.sigma.clotheswarehouse.payload.IncomeMaterialGetDTO;
+import com.sigma.clotheswarehouse.payload.IncomeMaterialPostDTO;
 import com.sigma.clotheswarehouse.repository.IncomeMaterialRepository;
 import com.sigma.clotheswarehouse.repository.MaterialRepository;
 import com.sigma.clotheswarehouse.repository.MeasurementRepository;
@@ -17,10 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -39,12 +37,12 @@ public class IncomeMaterialService {
     private final IncomeMaterialMapper incomeMaterialMapper;
 
 
-    public ApiResponse addIncomeMaterial(List<IncomeMaterialDTO> incomeMaterialDTOList) {
+    public ApiResponse addIncomeMaterial(List<IncomeMaterialPostDTO> incomeMaterialDTOList) {
         List<IncomeMaterial> incomeMaterialList = new LinkedList<>();
-        for (IncomeMaterialDTO incomeMaterialDTO : incomeMaterialDTOList) {
+        for (IncomeMaterialPostDTO incomeMaterialDTO : incomeMaterialDTOList) {
             IncomeMaterial incomeMaterial = incomeMaterialMapper.toEntity(incomeMaterialDTO);
 
-            Material material = materialMapper.toEntity(incomeMaterialDTO.getMaterialDTO());
+            Material material = materialMapper.toEntity(incomeMaterialDTO.getMaterialPostDTO());
             Optional<Material> optionalMaterial = materialRepository.findByName(material.getName());
             if (optionalMaterial.isPresent()) {
                 Material material1 = optionalMaterial.get();
@@ -71,17 +69,18 @@ public class IncomeMaterialService {
     }
 
     public ApiResponse getAllIncomeMaterials(Integer page, Integer size) {
-        List<IncomeMaterialDTO> incomeMaterialDTOList = new ArrayList<>();
         Page<IncomeMaterial> incomeMaterialPage;
         try {
             incomeMaterialPage = incomeMaterialRepo.findAll(CommandUtils.simplePageable(page, size));
         } catch (PageSizeException e) {
             return new ApiResponse(false, e.getMessage());
         }
-        for (IncomeMaterial incomeMaterial : incomeMaterialPage) {
-            IncomeMaterialDTO incomeMaterialDTO = incomeMaterialMapper.toDTO(incomeMaterial);
-            incomeMaterialDTOList.add(incomeMaterialDTO);
-        }
-        return new ApiResponse(true, "Income materials with Page", incomeMaterialDTOList);
+        List<IncomeMaterialGetDTO> incomeMaterialGetDTOS = incomeMaterialMapper.toDTOList(incomeMaterialPage.getContent());
+        Map<String, Object> response = new HashMap<>();
+        response.put("income materials", incomeMaterialGetDTOS);
+        response.put("currentPage", incomeMaterialPage.getNumber());
+        response.put("totalItems", incomeMaterialPage.getTotalElements());
+        response.put("totalPages", incomeMaterialPage.getTotalPages());
+        return new ApiResponse(true, "Income materials with Page", response);
     }
 }

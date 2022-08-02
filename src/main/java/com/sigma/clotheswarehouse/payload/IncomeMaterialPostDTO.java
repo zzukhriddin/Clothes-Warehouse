@@ -5,9 +5,9 @@ import lombok.Data;
 import java.sql.Timestamp;
 
 @Data
-public class IncomeMaterialDTO {
+public class IncomeMaterialPostDTO {
 
-    private MaterialDTO materialDTO;
+    private MaterialPostDTO materialPostDTO;
 
     private Timestamp incomeDate;
 
