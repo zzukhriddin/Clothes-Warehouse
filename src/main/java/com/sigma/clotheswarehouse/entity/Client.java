@@ -19,10 +19,10 @@ public class Client extends AbsLong {
     private String fio;
 
     @Column(nullable = false)
-    private Double price;
+    private double price;
 
     @Column(nullable = false)
-    private Double amount;
+    private double amount;
 
     @Column(nullable = false)
     private boolean deleted;

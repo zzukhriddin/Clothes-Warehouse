@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
-
 @Data
 @Entity
 @AllArgsConstructor
@@ -17,7 +16,9 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 public class Material extends AbsEntity {
     @Column(nullable = false)
-    private Double amount;
+    private double amount;
+
+    private double price;
 
     @Column(nullable = false)
     private boolean deleted;

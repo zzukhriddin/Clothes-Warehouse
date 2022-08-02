@@ -22,5 +22,5 @@ public class OutcomeMaterial extends AbsUUID {
     @ManyToOne
     private Product product;
 
-    private Double amount;
+    private double amount;
 }

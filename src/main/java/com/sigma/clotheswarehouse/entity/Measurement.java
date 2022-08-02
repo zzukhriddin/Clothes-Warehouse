@@ -15,8 +15,9 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Measurement extends AbsLong {
-    private String name;
 
     @Column(nullable = false)
+    private String name;
+
     private boolean deleted;
 }

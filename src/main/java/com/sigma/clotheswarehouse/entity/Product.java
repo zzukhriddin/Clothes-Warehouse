@@ -17,10 +17,10 @@ import javax.persistence.ManyToOne;
 @EqualsAndHashCode(callSuper = true)
 public class Product extends AbsEntity {
     @Column(nullable = false)
-    private Double price;
+    private double price;
 
     @Column(nullable = false)
-    private Double amount;
+    private double amount;
 
     @ManyToOne
     private Measurement measurement;
