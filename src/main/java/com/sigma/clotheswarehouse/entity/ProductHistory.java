@@ -21,14 +21,13 @@ public class ProductHistory extends AbsUUID {
     private Product product;
 
     @Column(nullable = false)
-    private Double price;
+    private double price;
 
     @Column(nullable = false)
-    private Double amount;
+    private double amount;
 
     @ManyToOne
     private Client client;
 
-    @Column(nullable = false)
     private Timestamp date;
 }

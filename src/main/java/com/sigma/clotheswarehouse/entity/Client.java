@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @Entity
@@ -20,10 +19,10 @@ public class Client extends AbsLong {
     private String fio;
 
     @Column(nullable = false)
-    private Double price;
+    private double price;
 
     @Column(nullable = false)
-    private Double amount;
+    private double amount;
 
     @Column(nullable = false)
     private boolean deleted;

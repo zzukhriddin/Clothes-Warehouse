@@ -7,10 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import java.util.UUID;
 
 @Data
 @Entity
@@ -25,5 +22,5 @@ public class OutcomeMaterial extends AbsUUID {
     @ManyToOne
     private Product product;
 
-    private Double amount;
+    private double amount;
 }

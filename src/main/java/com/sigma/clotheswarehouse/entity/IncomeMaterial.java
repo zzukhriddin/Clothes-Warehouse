@@ -19,14 +19,13 @@ public class IncomeMaterial extends AbsUUID {
     @ManyToOne
     private Material material;
 
-    @Column(nullable = false)
-    private Timestamp timestamp;
+    private Timestamp incomeDate;
 
     @Column(nullable = false)
-    private Double amount;
+    private double amount;
 
     @Column(nullable = false)
-    private Double price;
+    private double price;
 
     @ManyToOne
     private Measurement measurement;
