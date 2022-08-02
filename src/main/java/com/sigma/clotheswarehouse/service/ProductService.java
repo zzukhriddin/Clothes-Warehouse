@@ -5,6 +5,7 @@ import com.sigma.clotheswarehouse.entity.Product;
 import com.sigma.clotheswarehouse.mapper.ProductMapper;
 import com.sigma.clotheswarehouse.payload.ApiResponse;
 import com.sigma.clotheswarehouse.payload.ProductDTO;
+import com.sigma.clotheswarehouse.payload.ProductGetDto;
 import com.sigma.clotheswarehouse.repository.MeasurementRepository;
 import com.sigma.clotheswarehouse.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,15 +28,16 @@ public class ProductService {
 
     public HttpEntity<?> getAll() {
         List<Product> all = repository.findAll();
-        return ResponseEntity.ok(all);
+        List<ProductGetDto> DTOs = mapper.getDTOs(all);
+        return ResponseEntity.ok(DTOs);
     }
-
 
     public HttpEntity<?> getById(UUID id) {
         Optional<Product> optionalProduct = repository.findById(id);
         if (optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
-            return ResponseEntity.status(200).body(product);
+            ProductGetDto productGetDto = mapper.getDTO(product);
+            return ResponseEntity.status(200).body(productGetDto);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false, "PRODUCT_NOT_FOUND"));
     }
@@ -53,8 +55,8 @@ public class ProductService {
                     product.setAmount(dto.getAmount());
                     product.setMeasurement(measurement);
                     product.setDeleted(dto.isDeleted());
-                    ProductDTO productDTO = mapper.toDTO(repository.save(product));
-                    return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true,"PRODUCT_EDITED",productDTO));
+                    ProductGetDto productGetDto = mapper.getDTO(repository.save(product));
+                    return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true,"PRODUCT_EDITED",productGetDto));
                 }
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false, "MEASUREMENT_NOT_FOUND"));
             }
