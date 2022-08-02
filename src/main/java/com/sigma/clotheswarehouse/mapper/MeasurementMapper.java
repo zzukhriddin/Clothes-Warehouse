@@ -2,33 +2,14 @@ package com.sigma.clotheswarehouse.mapper;
 
 import com.sigma.clotheswarehouse.entity.Measurement;
 import com.sigma.clotheswarehouse.payload.MeasurementDTO;
-import com.sigma.clotheswarehouse.repository.MeasurementRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-
-import java.util.Optional;
-
-@Component
-@RequiredArgsConstructor
-public class MeasurementMapper {
-
-    private final MeasurementRepository measurementRepository;
+import org.mapstruct.Mapper;
 
 
-    public Measurement generateMeasurementFromMeasurementDTO(MeasurementDTO measurementDTO) {
-        Measurement measurement = new Measurement();
-        Optional<Measurement> optionalMeasurement = measurementRepository.findByName(measurementDTO.getName());
-        if (optionalMeasurement.isPresent())
-            measurement = optionalMeasurement.get();
-        measurement.setName(measurementDTO.getName());
+@Mapper(componentModel = "spring")
+public interface MeasurementMapper {
 
-        // Saving measurement
-        return measurementRepository.save(measurement);
-    }
+    Measurement toEntity(MeasurementDTO measurementDTO);
 
-    public MeasurementDTO generateMeasurementDTOFromMeasurement(Measurement measurement) {
-        MeasurementDTO measurementDTO = new MeasurementDTO();
-        measurementDTO.setName(measurement.getName());
-        return measurementDTO;
-    }
+    MeasurementDTO toDTO(Measurement measurement);
+
 }

@@ -1,37 +1,15 @@
 package com.sigma.clotheswarehouse.mapper;
 
 import com.sigma.clotheswarehouse.entity.Material;
-import com.sigma.clotheswarehouse.payload.IncomeMaterialDTO;
 import com.sigma.clotheswarehouse.payload.MaterialDTO;
-import com.sigma.clotheswarehouse.repository.MaterialRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
 
-import java.util.Optional;
 
-@Component
-@RequiredArgsConstructor
-public class MaterialMapper {
+@Mapper(componentModel = "spring")
+public interface MaterialMapper {
 
-    private final MaterialRepository materialRepository;
+    Material toEntity(MaterialDTO materialDTO);
 
-    public Material generateMaterialFromMaterialDTO(IncomeMaterialDTO incomeMaterialDTO) {
-        Material material = new Material();
-        Optional<Material> optionalMaterial = materialRepository.findByName(incomeMaterialDTO.getMaterialDTO().getName());
-        if (optionalMaterial.isPresent()) {
-            material = optionalMaterial.get();
-        }
-        material.setName(incomeMaterialDTO.getMaterialDTO().getName());
-        material.setAmount(material.getAmount() + incomeMaterialDTO.getAmount());
-        material.setPrice(material.getPrice() + incomeMaterialDTO.getPrice() * incomeMaterialDTO.getAmount());
+    MaterialDTO toDTO(Material material);
 
-        // Saving material
-        return materialRepository.save(material);
-    }
-
-    public MaterialDTO generateMaterialDTOFromMaterial(Material material) {
-        MaterialDTO materialDTO = new MaterialDTO();
-        materialDTO.setName(material.getName());
-        return materialDTO;
-    }
 }

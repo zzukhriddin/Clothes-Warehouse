@@ -2,36 +2,19 @@ package com.sigma.clotheswarehouse.mapper;
 
 import com.sigma.clotheswarehouse.entity.IncomeMaterial;
 import com.sigma.clotheswarehouse.payload.IncomeMaterialDTO;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-
-@Component
-@RequiredArgsConstructor
-public class IncomeMaterialMapper {
-
-    private final MaterialMapper materialMapper;
-
-    private final MeasurementMapper measurementMapper;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 
-    public IncomeMaterial generateIncomeMaterialFromIncomeMaterialDTO(IncomeMaterialDTO incomeMaterialDTO) {
-        IncomeMaterial incomeMaterial = new IncomeMaterial();
-        incomeMaterial.setMaterial(materialMapper.generateMaterialFromMaterialDTO(incomeMaterialDTO));
-        incomeMaterial.setIncomeDate(incomeMaterialDTO.getIncomeDate());
-        incomeMaterial.setAmount(incomeMaterialDTO.getAmount());
-        incomeMaterial.setPrice(incomeMaterialDTO.getPrice());
-        incomeMaterial.setMeasurement(measurementMapper.generateMeasurementFromMeasurementDTO(incomeMaterialDTO.getMeasurementDTO()));
-        return incomeMaterial;
-    }
+@Mapper(componentModel = "spring")
+public interface IncomeMaterialMapper {
 
-    public IncomeMaterialDTO generateIncomeMaterialDTOFromIncomeMaterial(IncomeMaterial incomeMaterial) {
-        IncomeMaterialDTO incomeMaterialDTO = new IncomeMaterialDTO();
-        incomeMaterialDTO.setMaterialDTO(materialMapper.generateMaterialDTOFromMaterial(incomeMaterial.getMaterial()));
-        incomeMaterialDTO.setIncomeDate(incomeMaterial.getIncomeDate());
-        incomeMaterialDTO.setAmount(incomeMaterial.getAmount());
-        incomeMaterialDTO.setPrice(incomeMaterial.getPrice());
-        incomeMaterialDTO.setMeasurementDTO(measurementMapper.generateMeasurementDTOFromMeasurement(incomeMaterial.getMeasurement()));
-        return incomeMaterialDTO;
-    }
+    @Mapping(target = "materialDTO", source = "material")
+    @Mapping(target = "measurementDTO", source = "measurement")
+    IncomeMaterialDTO toDTO(IncomeMaterial incomeMaterial);
+
+    @Mapping(target = "material", ignore = true)
+    @Mapping(target = "measurement", ignore = true)
+    IncomeMaterial toEntity(IncomeMaterialDTO incomeMaterialDTO);
 
 }
