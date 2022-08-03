@@ -14,9 +14,9 @@ public class IncomeMaterialGetDTO {
 
     private Timestamp incomeDate;
 
-    private Double amount;
+    private double amount;
 
-    private Double price;
+    private double price;
 
     private MeasurementDTO measurementDTO;
 }
