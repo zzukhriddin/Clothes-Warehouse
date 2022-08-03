@@ -31,8 +31,7 @@ public class ProductService {
     private final ProductMapper mapper;
 
     public HttpEntity<?> getAll(int page, int size) {
-//        Pageable pageable = PageRequest.of(page,size);
-        Pageable pageable = PageRequest.of(page,size, Sort.by("name"));
+        Pageable pageable = PageRequest.of(page,size);
         Page<Product> productPage = repository.findAll(pageable);
         List<ProductGetDto> DTOs = mapper.getDTOs(productPage.toList());
         return ResponseEntity.ok(DTOs);
