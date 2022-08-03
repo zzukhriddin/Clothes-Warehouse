@@ -16,9 +16,9 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping
-    public HttpEntity<?> getAll() {
-        return productService.getAll();
+    @GetMapping("/{page}/{size}")
+    public HttpEntity<?> getAll(@PathVariable int page, @PathVariable int size) {
+        return productService.getAll(page,size);
     }
 
     @GetMapping("/{id}")

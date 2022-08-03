@@ -9,6 +9,10 @@ import com.sigma.clotheswarehouse.payload.ProductGetDto;
 import com.sigma.clotheswarehouse.repository.MeasurementRepository;
 import com.sigma.clotheswarehouse.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +30,11 @@ public class ProductService {
 
     private final ProductMapper mapper;
 
-    public HttpEntity<?> getAll() {
-        List<Product> all = repository.findAll();
-        List<ProductGetDto> DTOs = mapper.getDTOs(all);
+    public HttpEntity<?> getAll(int page, int size) {
+//        Pageable pageable = PageRequest.of(page,size);
+        Pageable pageable = PageRequest.of(page,size, Sort.by("name"));
+        Page<Product> productPage = repository.findAll(pageable);
+        List<ProductGetDto> DTOs = mapper.getDTOs(productPage.toList());
         return ResponseEntity.ok(DTOs);
     }
 
