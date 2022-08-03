@@ -16,8 +16,10 @@ import com.sigma.clotheswarehouse.repository.MeasurementRepository;
 import com.sigma.clotheswarehouse.utils.CommandUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 @Service
@@ -82,5 +84,22 @@ public class IncomeMaterialService {
         response.put("totalItems", incomeMaterialPage.getTotalElements());
         response.put("totalPages", incomeMaterialPage.getTotalPages());
         return new ApiResponse(true, "Income materials with Page", response);
+    }
+
+    public ApiResponse getIncomeMaterialsBetweenTimes(Integer page, Integer size, Timestamp startDate, Timestamp endDate) {
+        Pageable pageable;
+        try {
+            pageable = CommandUtils.simplePageable(page, size);
+        } catch (PageSizeException e) {
+            return new ApiResponse(false, e.getMessage());
+        }
+        Page<IncomeMaterial> incomeMaterialRepoAllByIncomeDateBetween = incomeMaterialRepo.findAllByIncomeDateBetween(startDate, endDate, pageable);
+        List<IncomeMaterialGetDTO> incomeMaterialGetDTOS = incomeMaterialMapper.toDTOList(incomeMaterialRepoAllByIncomeDateBetween.getContent());
+        Map<String, Object> response = new HashMap<>();
+        response.put("income materials", incomeMaterialGetDTOS);
+        response.put("currentPage", incomeMaterialRepoAllByIncomeDateBetween.getNumber());
+        response.put("totalItems", incomeMaterialRepoAllByIncomeDateBetween.getTotalElements());
+        response.put("totalPages", incomeMaterialRepoAllByIncomeDateBetween.getTotalPages());
+        return new ApiResponse(true, "Income materials between times", response);
     }
 }
