@@ -27,6 +27,4 @@ public class IncomeMaterial extends AbsUUID {
     @Column(nullable = false)
     private double price;
 
-    @ManyToOne
-    private Measurement measurement;
 }

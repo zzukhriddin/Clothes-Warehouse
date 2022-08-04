@@ -5,7 +5,7 @@ import lombok.Data;
 import java.sql.Timestamp;
 
 @Data
-public class IncomeMaterialPostDTO {
+public class IncomeMaterialDTO {
 
     private MaterialPostDTO materialPostDTO;
 
@@ -15,5 +15,4 @@ public class IncomeMaterialPostDTO {
 
     private double price;
 
-    private MeasurementDTO measurementDTO;
 }

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 @Data
 @Entity
@@ -19,6 +20,9 @@ public class Material extends AbsEntity {
     private double amount;
 
     private double price;
+
+    @ManyToOne
+    private Measurement measurement;
 
     @Column(nullable = false)
     private boolean deleted;

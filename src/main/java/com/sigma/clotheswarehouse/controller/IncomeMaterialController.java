@@ -1,7 +1,7 @@
 package com.sigma.clotheswarehouse.controller;
 
 import com.sigma.clotheswarehouse.payload.ApiResponse;
-import com.sigma.clotheswarehouse.payload.IncomeMaterialPostDTO;
+import com.sigma.clotheswarehouse.payload.IncomeMaterialDTO;
 import com.sigma.clotheswarehouse.service.IncomeMaterialService;
 import com.sigma.clotheswarehouse.utils.AppConstant;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class IncomeMaterialController {
     private static final String INCOME_MATERIALS_BETWEEN_TIMES = "/between";
 
     @PostMapping
-    public HttpEntity<?> addIncomeMaterials(@RequestBody List<IncomeMaterialPostDTO> incomeMaterialDTOList) {
+    public HttpEntity<?> addIncomeMaterials(@RequestBody List<IncomeMaterialDTO> incomeMaterialDTOList) {
         ApiResponse apiResponse = incomeMaterialService.addIncomeMaterial(incomeMaterialDTOList);
         return ResponseEntity.ok(apiResponse);
     }

@@ -8,8 +8,7 @@ import com.sigma.clotheswarehouse.mapper.IncomeMaterialMapper;
 import com.sigma.clotheswarehouse.mapper.MaterialMapper;
 import com.sigma.clotheswarehouse.mapper.MeasurementMapper;
 import com.sigma.clotheswarehouse.payload.ApiResponse;
-import com.sigma.clotheswarehouse.payload.IncomeMaterialGetDTO;
-import com.sigma.clotheswarehouse.payload.IncomeMaterialPostDTO;
+import com.sigma.clotheswarehouse.payload.IncomeMaterialDTO;
 import com.sigma.clotheswarehouse.repository.IncomeMaterialRepository;
 import com.sigma.clotheswarehouse.repository.MaterialRepository;
 import com.sigma.clotheswarehouse.repository.MeasurementRepository;
@@ -39,30 +38,31 @@ public class IncomeMaterialService {
     private final IncomeMaterialMapper incomeMaterialMapper;
 
 
-    public ApiResponse addIncomeMaterial(List<IncomeMaterialPostDTO> incomeMaterialDTOList) {
+    public ApiResponse addIncomeMaterial(List<IncomeMaterialDTO> incomeMaterialDTOList) {
         List<IncomeMaterial> incomeMaterialList = new LinkedList<>();
-        for (IncomeMaterialPostDTO incomeMaterialDTO : incomeMaterialDTOList) {
+        for (IncomeMaterialDTO incomeMaterialDTO : incomeMaterialDTOList) {
             IncomeMaterial incomeMaterial = incomeMaterialMapper.toEntity(incomeMaterialDTO);
 
             Material material = materialMapper.toEntity(incomeMaterialDTO.getMaterialPostDTO());
+
+            Measurement measurement = measurementMapper.toEntity(incomeMaterialDTO.getMaterialPostDTO().getMeasurementDTO());
+            Optional<Measurement> optionalMeasurement = measurementRepository.findByName(measurement.getName());
+            if (optionalMeasurement.isPresent())
+                material.setMeasurement(optionalMeasurement.get());
+            else
+                material.setMeasurement(measurementRepository.save(measurement));
+
             Optional<Material> optionalMaterial = materialRepository.findByName(material.getName());
             if (optionalMaterial.isPresent()) {
                 Material material1 = optionalMaterial.get();
                 material1.setAmount(material1.getAmount() + incomeMaterialDTO.getAmount());
-                material1.setPrice(material1.getPrice() + incomeMaterialDTO.getAmount() * incomeMaterialDTO.getPrice());
+                material1.setPrice(incomeMaterialDTO.getPrice());
                 incomeMaterial.setMaterial(material1);
             } else {
                 material.setAmount(incomeMaterialDTO.getAmount());
-                material.setPrice(incomeMaterialDTO.getPrice()* incomeMaterialDTO.getAmount());
+                material.setPrice(incomeMaterialDTO.getPrice());
                 incomeMaterial.setMaterial(materialRepository.save(material));
             }
-
-            Measurement measurement = measurementMapper.toEntity(incomeMaterialDTO.getMeasurementDTO());
-            Optional<Measurement> optionalMeasurement = measurementRepository.findByName(measurement.getName());
-            if (optionalMeasurement.isPresent())
-                incomeMaterial.setMeasurement(optionalMeasurement.get());
-            else
-                incomeMaterial.setMeasurement(measurementRepository.save(measurement));
 
             incomeMaterialList.add(incomeMaterial);
         }
@@ -77,7 +77,7 @@ public class IncomeMaterialService {
         } catch (PageSizeException e) {
             return new ApiResponse(false, e.getMessage());
         }
-        List<IncomeMaterialGetDTO> incomeMaterialGetDTOS = incomeMaterialMapper.toDTOList(incomeMaterialPage.getContent());
+        List<IncomeMaterialDTO> incomeMaterialGetDTOS = incomeMaterialMapper.toDTOList(incomeMaterialPage.getContent());
         Map<String, Object> response = new HashMap<>();
         response.put("income materials", incomeMaterialGetDTOS);
         response.put("currentPage", incomeMaterialPage.getNumber());
@@ -94,7 +94,7 @@ public class IncomeMaterialService {
             return new ApiResponse(false, e.getMessage());
         }
         Page<IncomeMaterial> incomeMaterialRepoAllByIncomeDateBetween = incomeMaterialRepo.findAllByIncomeDateBetween(startDate, endDate, pageable);
-        List<IncomeMaterialGetDTO> incomeMaterialGetDTOS = incomeMaterialMapper.toDTOList(incomeMaterialRepoAllByIncomeDateBetween.getContent());
+        List<IncomeMaterialDTO> incomeMaterialGetDTOS = incomeMaterialMapper.toDTOList(incomeMaterialRepoAllByIncomeDateBetween.getContent());
         Map<String, Object> response = new HashMap<>();
         response.put("income materials", incomeMaterialGetDTOS);
         response.put("currentPage", incomeMaterialRepoAllByIncomeDateBetween.getNumber());
