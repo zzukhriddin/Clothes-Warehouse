@@ -5,15 +5,14 @@ import lombok.Data;
 import java.sql.Timestamp;
 
 @Data
-public class IncomeMaterialPostDTO {
+public class IncomeMaterialDTO {
 
     private MaterialPostDTO materialPostDTO;
 
     private Timestamp incomeDate;
 
-    private Double amount;
+    private double amount;
 
-    private Double price;
+    private double price;
 
-    private MeasurementDTO measurementDTO;
 }

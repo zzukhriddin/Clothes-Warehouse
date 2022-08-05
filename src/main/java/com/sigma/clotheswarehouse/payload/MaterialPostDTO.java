@@ -7,4 +7,6 @@ public class MaterialPostDTO {
 
     private String name;
 
+    private MeasurementDTO measurementDTO;
+
 }
