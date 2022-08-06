@@ -3,7 +3,7 @@ package com.sigma.clotheswarehouse.mapper;
 import com.sigma.clotheswarehouse.entity.Material;
 import com.sigma.clotheswarehouse.entity.ResourceForOutcomeMaterial;
 import com.sigma.clotheswarehouse.payload.ResourceForOutcomeMaterialDTO;
-import com.sigma.clotheswarehouse.repo.ResourceForOutcomeMaterialRepository;
+import com.sigma.clotheswarehouse.repository.ResourceForOutcomeMaterialRepository;
 import com.sigma.clotheswarehouse.repository.MaterialRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
