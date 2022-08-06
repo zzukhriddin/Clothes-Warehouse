@@ -2,12 +2,14 @@ package com.sigma.clotheswarehouse.payload;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class OutcomeMaterialPostDTO {
 
-    private MaterialPostDTO materialPostDTO;
+    private List<ResourceForOutcomeMaterialDTO> materials;
 
-    private ProductDTO productDTO;
+    private ProductPostDTO productPostDTO;
 
     private double amount;
 }
