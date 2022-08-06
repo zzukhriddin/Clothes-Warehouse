@@ -19,7 +19,7 @@ import java.util.List;
 public class OutcomeMaterial extends AbsUUID {
 
     @ManyToMany
-    private List<Material> materials;
+    private List<ResourceForOutcomeMaterial> resources;
 
     @ManyToOne
     private Product product;
