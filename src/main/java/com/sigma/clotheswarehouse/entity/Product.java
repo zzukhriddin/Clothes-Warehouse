@@ -25,6 +25,9 @@ public class Product extends AbsEntity {
     @ManyToOne
     private Measurement measurement;
 
+    @ManyToOne
+    private Category category;
+
     @Column(nullable = false)
     private boolean deleted;
 }
