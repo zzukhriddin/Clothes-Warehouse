@@ -50,7 +50,7 @@ public class SecurityConfig {
                 .httpBasic()
                 .disable()
                 .authorizeHttpRequests(authorize -> authorize
-                        .antMatchers("/api/**")
+                        .antMatchers("/api/**", "/clothes-warehouse", "/swagger-ui/index.html")
                         .permitAll()
                         .anyRequest()
                         .authenticated()
