@@ -17,6 +17,6 @@ public class OutcomeMaterialGetDTO {
 
     private double totalProductPrice;
 
-    private List<ResourceForOutcomeMaterialDTO> materials;
+    private List<ResourceForOutcomeMaterialGetDTO> materials;
 
 }
