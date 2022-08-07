@@ -84,7 +84,7 @@ public class MaterialService {
             return new ApiResponse(false, "Such a material does not exist");
 
         Material material = optionalMaterial.get();
-        material.setDeleted(false);
+        material.setDeleted(true);
         materialRepo.save(material);
         return new ApiResponse(true, "Successfully deleted");
     }

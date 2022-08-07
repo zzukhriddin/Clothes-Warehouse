@@ -78,12 +78,11 @@ public class MaterialMapperImplCustom implements MaterialMapper {
 
         Optional<Measurement> optionalMeasurement = measurementRepo.findByName(materialUpdateDTO.getMeasurementName());
         if (optionalMeasurement.isEmpty()) {
-            return null;
-        }
-
-        MeasurementDTO measurementDTO = new MeasurementDTO();
-        measurementDTO.setName(materialUpdateDTO.getMeasurementName());
-        material.setMeasurement(measurementMapper.toEntity(measurementDTO));
+            MeasurementDTO measurementDTO = new MeasurementDTO();
+            measurementDTO.setName(materialUpdateDTO.getMeasurementName());
+            material.setMeasurement(measurementRepo.save(measurementMapper.toEntity(measurementDTO)));
+        } else
+            material.setMeasurement(optionalMeasurement.get());
         return material;
     }
 

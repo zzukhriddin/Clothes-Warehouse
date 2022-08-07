@@ -9,16 +9,12 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper
 public interface MaterialMapper {
 
-    @Mapping(target = "measurement", ignore = true)
     Material toEntity(MaterialPostDTO materialDTO);
 
-    @Mapping(target = "measurementDTO", source = "measurement")
     MaterialGetDTO toGetDTO(Material material);
 
-    @Mapping(target = "measurementDTO", source = "measurement")
     List<MaterialGetDTO> toDTOList(List<Material> materials);
 
     Material toEntityFromUpdateDTO(Material material, MaterialUpdateDTO materialUpdateDTO);
