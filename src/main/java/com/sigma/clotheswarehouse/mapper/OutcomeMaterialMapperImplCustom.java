@@ -28,11 +28,12 @@ public class OutcomeMaterialMapperImplCustom implements OutcomeMaterialMapper {
 
         outcomeMaterial.setProductAmount(outcomeMaterialPostDTO.getProductAmount());
 
-        outcomeMaterial.setProductPrice(outcomeMaterialPostDTO.getProductPrice());
+        outcomeMaterial.setProductNewPrice(outcomeMaterialPostDTO.getProductPrice());
 
         Optional<Product> optionalProduct = productRepo.findById(outcomeMaterialPostDTO.getProductId());
         if (optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
+            outcomeMaterial.setProductOldPrice(product.getPrice());
             product.setPrice(outcomeMaterialPostDTO.getProductPrice());
             product.setAmount(outcomeMaterialPostDTO.getProductAmount() + product.getAmount());
             outcomeMaterial.setProduct(product);
@@ -49,11 +50,12 @@ public class OutcomeMaterialMapperImplCustom implements OutcomeMaterialMapper {
 
         OutcomeMaterialGetDTO outcomeMaterialGetDTO = new OutcomeMaterialGetDTO();
 
+        outcomeMaterialGetDTO.setId(outcomeMaterial.getId());
         outcomeMaterialGetDTO.setProductName(outcomeMaterialProductName(outcomeMaterial));
         outcomeMaterialGetDTO.setProductMeasurementName(outcomeMaterialProductMeasurementName(outcomeMaterial));
         outcomeMaterialGetDTO.setProductCategoryName(outcomeMaterialProductCategoryName(outcomeMaterial));
         outcomeMaterialGetDTO.setProductAmount(outcomeMaterial.getProductAmount());
-        outcomeMaterialGetDTO.setTotalProductPrice(outcomeMaterial.getProductAmount() * outcomeMaterial.getProductPrice());
+        outcomeMaterialGetDTO.setTotalProductPrice(outcomeMaterial.getProductAmount() * outcomeMaterial.getProductNewPrice());
         outcomeMaterialGetDTO.setMaterials(resourceForOutcomeMaterialListToResourceForOutcomeMaterialGetDTOList(outcomeMaterial.getResources()));
 
         return outcomeMaterialGetDTO;

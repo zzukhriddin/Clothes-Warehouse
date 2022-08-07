@@ -3,9 +3,12 @@ package com.sigma.clotheswarehouse.payload;
 import lombok.Data;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class OutcomeMaterialGetDTO {
+
+    private UUID id;
 
     private String productName;
 
