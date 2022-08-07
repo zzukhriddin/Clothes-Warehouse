@@ -1,15 +1,14 @@
 package com.sigma.clotheswarehouse.controller;
 
 import com.sigma.clotheswarehouse.payload.ApiResponse;
+import com.sigma.clotheswarehouse.payload.MaterialPostDTO;
+import com.sigma.clotheswarehouse.payload.MaterialUpdateDTO;
 import com.sigma.clotheswarehouse.service.MaterialService;
 import com.sigma.clotheswarehouse.utils.AppConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -24,8 +23,18 @@ public class MaterialController {
     private final MaterialService materialService;
     private static final String ALL_MATERIALS = "/all";
 
-    private static final String MATERIAL_BY_ID = "/byId";
+    private static final String MATERIAL_BY_ID = "/getById";
 
+    private static final String UPDATE_MATERIAL_BY_ID = "/updateById";
+
+    private static final String DELETE_MATERIAL_BY_ID = "/deleteById";
+
+
+    @PostMapping
+    public HttpEntity<?> addMaterial(@RequestBody MaterialPostDTO materialPostDTO) {
+        ApiResponse apiResponse = materialService.addMaterial(materialPostDTO);
+        return ResponseEntity.ok(apiResponse);
+    }
 
     @GetMapping(ALL_MATERIALS)
     public HttpEntity<?> getAllMaterials(
@@ -39,6 +48,19 @@ public class MaterialController {
     @GetMapping(MATERIAL_BY_ID)
     public HttpEntity<?> getMaterialById(@RequestParam(name = "materialId") UUID materialId) {
         ApiResponse apiResponse = materialService.getMaterialById(materialId);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 404).body(apiResponse);
+    }
+
+    @PutMapping(UPDATE_MATERIAL_BY_ID)
+    public HttpEntity<?> editMaterialById(@RequestParam(name = "materialId") UUID materialId,
+                                          @RequestBody MaterialUpdateDTO materialUpdateDTO) {
+        ApiResponse apiResponse = materialService.editMaterialById(materialId, materialUpdateDTO);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 404).body(apiResponse);
+    }
+
+    @DeleteMapping(DELETE_MATERIAL_BY_ID)
+    public HttpEntity<?> deleteMaterialById(@RequestParam(name = "materialId") UUID materialId) {
+        ApiResponse apiResponse = materialService.deleteById(materialId);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 404).body(apiResponse);
     }
 }

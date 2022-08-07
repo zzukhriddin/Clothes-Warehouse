@@ -4,14 +4,23 @@ import com.sigma.clotheswarehouse.entity.Material;
 import com.sigma.clotheswarehouse.entity.Measurement;
 import com.sigma.clotheswarehouse.payload.MaterialGetDTO;
 import com.sigma.clotheswarehouse.payload.MaterialPostDTO;
+import com.sigma.clotheswarehouse.payload.MaterialUpdateDTO;
 import com.sigma.clotheswarehouse.payload.MeasurementDTO;
+import com.sigma.clotheswarehouse.repository.MeasurementRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class MaterialMapperImplCustom implements MaterialMapper {
+
+    private final MeasurementRepository measurementRepo;
+
+    private final MeasurementMapper measurementMapper;
 
     @Override
     public Material toEntity(MaterialPostDTO materialDTO) {
@@ -55,6 +64,27 @@ public class MaterialMapperImplCustom implements MaterialMapper {
         }
 
         return list;
+    }
+
+    @Override
+    public Material toEntityFromUpdateDTO(Material material, MaterialUpdateDTO materialUpdateDTO) {
+        if (materialUpdateDTO == null)
+            return null;
+
+        material.setName(materialUpdateDTO.getMaterialName());
+        material.setAmount(materialUpdateDTO.getAmount());
+        material.setPrice(materialUpdateDTO.getPrice());
+        material.setDeleted(materialUpdateDTO.isDeleted());
+
+        Optional<Measurement> optionalMeasurement = measurementRepo.findByName(materialUpdateDTO.getMeasurementName());
+        if (optionalMeasurement.isEmpty()) {
+            return null;
+        }
+
+        MeasurementDTO measurementDTO = new MeasurementDTO();
+        measurementDTO.setName(materialUpdateDTO.getMeasurementName());
+        material.setMeasurement(measurementMapper.toEntity(measurementDTO));
+        return material;
     }
 
     protected MeasurementDTO measurementToMeasurementDTO(Measurement measurement) {

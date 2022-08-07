@@ -3,6 +3,7 @@ package com.sigma.clotheswarehouse.mapper;
 import com.sigma.clotheswarehouse.entity.Material;
 import com.sigma.clotheswarehouse.payload.MaterialGetDTO;
 import com.sigma.clotheswarehouse.payload.MaterialPostDTO;
+import com.sigma.clotheswarehouse.payload.MaterialUpdateDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -19,5 +20,7 @@ public interface MaterialMapper {
 
     @Mapping(target = "measurementDTO", source = "measurement")
     List<MaterialGetDTO> toDTOList(List<Material> materials);
+
+    Material toEntityFromUpdateDTO(Material material, MaterialUpdateDTO materialUpdateDTO);
 
 }
