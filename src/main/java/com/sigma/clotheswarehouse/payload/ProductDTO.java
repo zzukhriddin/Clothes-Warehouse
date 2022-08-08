@@ -18,6 +18,8 @@ public class ProductDTO {
 
     private Long measurementId;
 
+    private Long categoryId;
+
     private boolean deleted;
 }
 

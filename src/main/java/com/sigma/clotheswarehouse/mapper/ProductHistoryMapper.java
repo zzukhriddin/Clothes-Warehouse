@@ -11,13 +11,13 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ProductHistoryMapper {
 
-    @Mapping(target = "client", source = "clientId")
-    @Mapping(target = "product", source = "productId")
+    @Mapping(target = "client.id", source = "clientId")
+    @Mapping(target = "product.id", source = "productId")
     ProductHistory toEntity(ProductHistoryDTO productHistoryDTO);
 
 
-    @Mapping(target = "productId", source = "product")
-    @Mapping(target = "clientId", source = "client")
+    @Mapping(target = "productId", source = "product.id")
+    @Mapping(target = "clientId", source = "client.id")
     ProductHistoryDTO toDTO(ProductHistory productHistory);
 
 
