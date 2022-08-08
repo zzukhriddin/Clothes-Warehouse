@@ -12,6 +12,10 @@ public class ProductDTO {
     @NotNull
     private String name;
 
+    private String model;
+
+    private String code;
+
     private double price;
 
     private double amount;

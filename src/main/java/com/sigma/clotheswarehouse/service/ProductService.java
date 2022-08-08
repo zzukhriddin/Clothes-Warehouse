@@ -68,6 +68,8 @@ public class ProductService {
                         product.setMeasurement(measurement);
                         product.setDeleted(dto.isDeleted());
                         product.setCategory(category);
+                        product.setModel(dto.getModel());
+                        product.setCode(dto.getCode());
                         ProductGetDto productGetDto = mapper.getDTO(repository.save(product));
                         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "PRODUCT_EDITED", productGetDto));
                     }

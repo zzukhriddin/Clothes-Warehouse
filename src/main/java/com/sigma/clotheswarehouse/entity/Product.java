@@ -17,6 +17,11 @@ import javax.persistence.ManyToOne;
 @EqualsAndHashCode(callSuper = true)
 public class Product extends AbsEntity {
 
+    private String model;
+
+    private String code;
+
+
     @Column(nullable = false)
     private double price;
 
