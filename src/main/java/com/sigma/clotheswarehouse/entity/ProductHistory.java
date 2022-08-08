@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,5 +30,7 @@ public class ProductHistory extends AbsUUID {
     @ManyToOne
     private Client client;
 
+    @Column(nullable = false, updatable = false)
+    @CreationTimestamp
     private Timestamp date;
 }
