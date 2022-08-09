@@ -45,7 +45,7 @@ public class OutcomeMaterialService {
         }
         List<ResourceForOutcomeMaterial> resourceForOutcomeMaterials = resourceMapper.toEntityList(outcomeMaterialPostDTO.getResources());
         if (resourceForOutcomeMaterials == null)
-            return new ApiResponse(false, "Such materials do not exist");
+            return new ApiResponse(false, "Such material does not exist or there is not enough material");
         outcomeMaterial.setResources(resourceForOutcomeMaterials);
         outcomeMaterialRepo.save(outcomeMaterial);
         return new ApiResponse(true, "Successfully saved");
@@ -72,7 +72,11 @@ public class OutcomeMaterialService {
         if (optionalOutcomeMaterial.isEmpty())
             return new ApiResponse(false, "Such a outcome material does not exist");
         OutcomeMaterial outcomeMaterial = optionalOutcomeMaterial.get();
-        outcomeMaterial.setResources(resourceMapper.toUpdateEntityList(outcomeMaterial, outcomeMaterialUpdateDTO.getResources()));
+        List<ResourceForOutcomeMaterial> resourceForOutcomeMaterials = resourceMapper.toUpdateEntityList(outcomeMaterial, outcomeMaterialUpdateDTO.getResources());
+        if (resourceForOutcomeMaterials == null)
+            return new ApiResponse(false, "Such material does not exist or there is not enough material");
+        else
+            outcomeMaterial.setResources(resourceForOutcomeMaterials);
         Product product = outcomeMaterial.getProduct();
         product.setPrice(outcomeMaterial.getProductOldPrice());
         product.setAmount(product.getAmount() - outcomeMaterial.getProductAmount());
@@ -101,7 +105,7 @@ public class OutcomeMaterialService {
     public ApiResponse deleteOutcomeMaterialId(UUID id) {
         Optional<OutcomeMaterial> optionalOutcomeMaterial = outcomeMaterialRepo.findById(id);
         if (optionalOutcomeMaterial.isEmpty())
-            return new ApiResponse(false, "Such a outcome material does not exist");
+            return new ApiResponse(false, "Such an outcome material does not exist");
         OutcomeMaterial outcomeMaterial = optionalOutcomeMaterial.get();
         outcomeMaterialRepo.delete(outcomeMaterial);
         rollbackAfterDeletingOutcomeMaterial(outcomeMaterial);

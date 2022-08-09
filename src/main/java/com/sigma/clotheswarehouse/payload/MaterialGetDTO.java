@@ -15,6 +15,8 @@ public class MaterialGetDTO {
 
     private double price;
 
+    private boolean deleted;
+
     private MeasurementDTO measurementDTO;
 
 }

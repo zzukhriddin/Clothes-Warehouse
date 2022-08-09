@@ -29,7 +29,10 @@ public class ResourceForOutcomeMaterialMapperImplCustom implements ResourceForOu
         Optional<Material> optionalMaterial = materialRepo.findById(resource.getMaterialId());
         if (optionalMaterial.isPresent()) {
             Material material = optionalMaterial.get();
-            material.setAmount(material.getAmount() - resource.getMaterialAmount());
+            if (material.getAmount() >= resource.getMaterialAmount())
+                material.setAmount(material.getAmount() - resource.getMaterialAmount());
+            else
+                return null;
             resourceForOutcomeMaterial.setMaterial(material);
             resourceForOutcomeMaterial.setMaterialAmount(resource.getMaterialAmount());
         } else
@@ -45,7 +48,10 @@ public class ResourceForOutcomeMaterialMapperImplCustom implements ResourceForOu
         Optional<Material> optionalMaterial = materialRepo.findById(resource.getMaterialId());
         if (optionalMaterial.isPresent()) {
             Material material = optionalMaterial.get();
-            material.setAmount(material.getAmount() - resource.getMaterialAmount());
+            if (material.getAmount() >= resource.getMaterialAmount())
+                material.setAmount(material.getAmount() - resource.getMaterialAmount());
+            else
+                return null;
             resourceForOutcomeMaterial.setMaterial(material);
             resourceForOutcomeMaterial.setMaterialAmount(resource.getMaterialAmount());
         } else
