@@ -45,6 +45,10 @@ public class ResourceForOutcomeMaterialMapperImplCustom implements ResourceForOu
         if (resource == null)
             return null;
         ResourceForOutcomeMaterial resourceForOutcomeMaterial = new ResourceForOutcomeMaterial();
+        for (ResourceForOutcomeMaterial outcomeMaterialResource : outcomeMaterial.getResources()) {
+            if (outcomeMaterialResource.getMaterial().getId().equals(resource.getMaterialId()))
+                resourceForOutcomeMaterial = outcomeMaterialResource;
+        }
         Optional<Material> optionalMaterial = materialRepo.findById(resource.getMaterialId());
         if (optionalMaterial.isPresent()) {
             Material material = optionalMaterial.get();
@@ -68,6 +72,8 @@ public class ResourceForOutcomeMaterialMapperImplCustom implements ResourceForOu
 
         for (ResourceForOutcomeMaterialDTO resource : resources) {
             ResourceForOutcomeMaterial resourceForOutcomeMaterial = toEntity(resource);
+            if (resourceForOutcomeMaterial == null)
+                return null;
             resourceForOutcomeMaterials.add(resourceForOutcomeMaterial);
         }
         return resourceForOutcomeMaterialRepo.saveAll(resourceForOutcomeMaterials);
@@ -90,6 +96,8 @@ public class ResourceForOutcomeMaterialMapperImplCustom implements ResourceForOu
 
         for (ResourceForOutcomeMaterialDTO resource : resources) {
             ResourceForOutcomeMaterial resourceForOutcomeMaterial = toUpdateEntity(outcomeMaterial, resource);
+            if (resourceForOutcomeMaterial == null)
+                return null;
             resourceForOutcomeMaterials.add(resourceForOutcomeMaterial);
         }
         return resourceForOutcomeMaterialRepo.saveAll(resourceForOutcomeMaterials);

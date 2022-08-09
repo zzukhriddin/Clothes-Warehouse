@@ -92,12 +92,17 @@ public class OutcomeMaterialService {
         outcomeMaterial.setProductNewPrice(outcomeMaterialUpdateDTO.getProductPrice());
         outcomeMaterial.setProductAmount(outcomeMaterialUpdateDTO.getProductAmount());
         outcomeMaterialRepo.save(outcomeMaterial);
+        boolean isItOutcome;
         for (ResourceForOutcomeMaterial resourceForOutcomeMaterial : resourceForOutcomeMaterialRepo.findAll()) {
+            isItOutcome = false;
             for (OutcomeMaterial outcomeMaterial1 : outcomeMaterialRepo.findAll()) {
-                if (!outcomeMaterial1.getResources().contains(resourceForOutcomeMaterial)) {
-                    resourceForOutcomeMaterialRepo.delete(resourceForOutcomeMaterial);
+                if (outcomeMaterial1.getResources().contains(resourceForOutcomeMaterial)) {
+                    isItOutcome = true;
+                    break;
                 }
             }
+            if (!isItOutcome)
+                resourceForOutcomeMaterialRepo.delete(resourceForOutcomeMaterial);
         }
         return new ApiResponse(true, "Successfully updated");
     }
