@@ -41,6 +41,8 @@ public class IncomeMaterialService {
     public ApiResponse addIncomeMaterial(List<IncomeMaterialDTO> incomeMaterialDTOList) {
         List<IncomeMaterial> incomeMaterialList = new LinkedList<>();
         for (IncomeMaterialDTO incomeMaterialDTO : incomeMaterialDTOList) {
+            if (incomeMaterialDTO.getAmount() < 0)
+                return new ApiResponse(false, "The amount of material must not be negative");
             IncomeMaterial incomeMaterial = incomeMaterialMapper.toEntity(incomeMaterialDTO);
 
             Material material = materialMapper.toEntity(incomeMaterialDTO.getMaterialPostDTO());
