@@ -15,11 +15,21 @@ public class ProductGetDto {
 
     private String name;
 
+    private String model;
+
+    private String code;
+
+    private String color;
+
+    private double seriaAmount;
+
     private double price;
 
     private double amount;
 
     private MeasurementDTO measurementDTO;
+
+    private CategoryDTO categoryDTO;
 
     private boolean deleted;
 }
