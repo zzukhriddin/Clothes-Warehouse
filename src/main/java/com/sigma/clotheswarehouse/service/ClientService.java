@@ -19,7 +19,7 @@ public class ClientService {
 
     private final ClientRepository clientRepository;
     public ApiResponse addClient(ClientPostDto clientPostDto) {
-        if (clientRepository.findByPhoneNumber(clientPostDto.getPhoneNumber())) {
+        if (clientRepository.findByPhoneNumber(clientPostDto.getPhoneNumber()).isPresent()) {
                return new ApiResponse(false, "Phone number is exist");
         }
         Client client = new Client(clientPostDto.getFio(), clientPostDto.getPhoneNumber(), clientPostDto.getAddress(), false);
@@ -62,13 +62,17 @@ public class ClientService {
         return new ApiResponse(true, "All Clients",clientGetDtoList);
     }
 
-    public ApiResponse updateClient(Long id, ClientUpdateDto clientUpdateDto) {
+    public ApiResponse updateClient(long id, ClientUpdateDto clientUpdateDto) {
         Optional<Client> clientOptional = clientRepository.findById(id);
         if (clientOptional.isEmpty()){
             return new ApiResponse(false,"Such a client does not exist");
         }
-        if (clientRepository.findByPhoneNumber(clientUpdateDto.getPhoneNumber())) {
-            return new ApiResponse(false, "Phone number is exist");
+        Optional<Client> optionalClient = clientRepository.findByPhoneNumber(clientUpdateDto.getPhoneNumber());
+        if (optionalClient.isPresent()) {
+            Client clientByPhone = optionalClient.get();
+            if (id != clientByPhone.getId()) {
+                return new ApiResponse(false, "Phone number is exist");
+            }
         }
         Client client = clientOptional.get();
         client.setFio(clientUpdateDto.getFio());
