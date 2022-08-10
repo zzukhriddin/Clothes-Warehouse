@@ -22,7 +22,7 @@ public interface ProductMapper {
     ProductDTO toDTO(Product product);
 
 
-    @Mapping(target = "categoryGetDTO", source = "category")
+    @Mapping(target = "categoryDTO", source = "category")
     @Mapping(target = "measurementDTO", source = "measurement")
     ProductGetDto getDTO(Product product);
 
