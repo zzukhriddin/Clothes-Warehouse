@@ -10,6 +10,5 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryUpdateDto {
-    private UUID id;
     private String name;
 }

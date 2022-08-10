@@ -42,7 +42,7 @@ public class MeasurementService {
     }
 
 
-    public ApiResponse getAllMeasurement(MeasurementGetDto measurementGetDto) {
+    public ApiResponse getAllMeasurement() {
         List<Measurement> measurementList = measurementRepository.findAll();
         List<MeasurementGetDto> measurementGetDtoList = new LinkedList<>();
         if (measurementList.isEmpty()){
@@ -82,6 +82,6 @@ public class MeasurementService {
         Measurement measurement = measurementOptional.get();
         measurement.setDeleted(true);
         measurementRepository.save(measurement);
-        return new ApiResponse(true,"Measurement successfully updated");
+        return new ApiResponse(true,"Measurement successfully deleted");
     }
 }

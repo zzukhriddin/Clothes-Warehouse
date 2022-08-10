@@ -20,7 +20,7 @@ public class CategoryService {
 
     public ApiResponse addCategory(CategoryPostDto categoryPostDto) {
         Category category = new Category();
-        if (categoryRepository.existsByName(categoryPostDto.getName()).isPresent()){
+        if (categoryRepository.findByName(categoryPostDto.getName()).isPresent()){
             return new ApiResponse(false,"exist");
         }
         category.setName(categoryPostDto.getName());
@@ -56,8 +56,8 @@ public class CategoryService {
         if (!categoryRepository.existsById(id)){
             return new ApiResponse(false,"not available");
         }
-        if (categoryRepository.existsByIdAndName(id, categoryUpdateDto.getName()).isEmpty() &&
-                categoryRepository.existsByName(categoryUpdateDto.getName()).isPresent()){
+        if (categoryRepository.findByIdAndName(id, categoryUpdateDto.getName()).isEmpty() &&
+                categoryRepository.findByName(categoryUpdateDto.getName()).isPresent()){
             return new ApiResponse(false,"not available");
         }
         Category category = categoryRepository.findById(id).get();
