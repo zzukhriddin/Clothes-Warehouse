@@ -21,6 +21,9 @@ public class Product extends AbsEntity {
 
     private String code;
 
+    private String color;
+
+    private double seriaAmount;
 
     @Column(nullable = false)
     private double price;
