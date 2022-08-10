@@ -48,6 +48,7 @@ public class MaterialMapperImplCustom implements MaterialMapper {
         materialGetDTO.setName(material.getName());
         materialGetDTO.setAmount(material.getAmount());
         materialGetDTO.setPrice(material.getPrice() * material.getAmount());
+        materialGetDTO.setDeleted(material.isDeleted());
 
         return materialGetDTO;
     }

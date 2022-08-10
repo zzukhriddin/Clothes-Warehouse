@@ -1,6 +1,7 @@
 package com.sigma.clotheswarehouse.mapper;
 
 import com.sigma.clotheswarehouse.entity.Material;
+import com.sigma.clotheswarehouse.entity.OutcomeMaterial;
 import com.sigma.clotheswarehouse.entity.ResourceForOutcomeMaterial;
 import com.sigma.clotheswarehouse.payload.ResourceForOutcomeMaterialDTO;
 import com.sigma.clotheswarehouse.repository.ResourceForOutcomeMaterialRepository;
@@ -28,7 +29,33 @@ public class ResourceForOutcomeMaterialMapperImplCustom implements ResourceForOu
         Optional<Material> optionalMaterial = materialRepo.findById(resource.getMaterialId());
         if (optionalMaterial.isPresent()) {
             Material material = optionalMaterial.get();
-            material.setAmount(material.getAmount() - resource.getMaterialAmount());
+            if (material.getAmount() >= resource.getMaterialAmount())
+                material.setAmount(material.getAmount() - resource.getMaterialAmount());
+            else
+                return null;
+            resourceForOutcomeMaterial.setMaterial(material);
+            resourceForOutcomeMaterial.setMaterialAmount(resource.getMaterialAmount());
+        } else
+            return null;
+        return resourceForOutcomeMaterial;
+    }
+
+    @Override
+    public ResourceForOutcomeMaterial toUpdateEntity(OutcomeMaterial outcomeMaterial, ResourceForOutcomeMaterialDTO resource) {
+        if (resource == null)
+            return null;
+        ResourceForOutcomeMaterial resourceForOutcomeMaterial = new ResourceForOutcomeMaterial();
+        for (ResourceForOutcomeMaterial outcomeMaterialResource : outcomeMaterial.getResources()) {
+            if (outcomeMaterialResource.getMaterial().getId().equals(resource.getMaterialId()))
+                resourceForOutcomeMaterial = outcomeMaterialResource;
+        }
+        Optional<Material> optionalMaterial = materialRepo.findById(resource.getMaterialId());
+        if (optionalMaterial.isPresent()) {
+            Material material = optionalMaterial.get();
+            if (material.getAmount() >= resource.getMaterialAmount())
+                material.setAmount(material.getAmount() - resource.getMaterialAmount());
+            else
+                return null;
             resourceForOutcomeMaterial.setMaterial(material);
             resourceForOutcomeMaterial.setMaterialAmount(resource.getMaterialAmount());
         } else
@@ -45,6 +72,32 @@ public class ResourceForOutcomeMaterialMapperImplCustom implements ResourceForOu
 
         for (ResourceForOutcomeMaterialDTO resource : resources) {
             ResourceForOutcomeMaterial resourceForOutcomeMaterial = toEntity(resource);
+            if (resourceForOutcomeMaterial == null)
+                return null;
+            resourceForOutcomeMaterials.add(resourceForOutcomeMaterial);
+        }
+        return resourceForOutcomeMaterialRepo.saveAll(resourceForOutcomeMaterials);
+    }
+
+    @Override
+    public List<ResourceForOutcomeMaterial> toUpdateEntityList(OutcomeMaterial outcomeMaterial, List<ResourceForOutcomeMaterialDTO> resources) {
+        for (ResourceForOutcomeMaterial outcomeMaterialResource : outcomeMaterial.getResources()) {
+            Optional<Material> optionalMaterial = materialRepo.findById(outcomeMaterialResource.getMaterial().getId());
+            if (optionalMaterial.isPresent()) {
+                Material material = optionalMaterial.get();
+                material.setAmount(material.getAmount() + outcomeMaterialResource.getMaterialAmount());
+                materialRepo.save(material);
+            }
+        }
+        if (resources == null)
+            return null;
+
+        List<ResourceForOutcomeMaterial> resourceForOutcomeMaterials = new LinkedList<>();
+
+        for (ResourceForOutcomeMaterialDTO resource : resources) {
+            ResourceForOutcomeMaterial resourceForOutcomeMaterial = toUpdateEntity(outcomeMaterial, resource);
+            if (resourceForOutcomeMaterial == null)
+                return null;
             resourceForOutcomeMaterials.add(resourceForOutcomeMaterial);
         }
         return resourceForOutcomeMaterialRepo.saveAll(resourceForOutcomeMaterials);
