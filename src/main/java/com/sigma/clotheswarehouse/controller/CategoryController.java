@@ -36,9 +36,9 @@ public class CategoryController {
         ApiResponse apiResponse = categoryService.updateCategory(id, categoryUpdateDto);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 400).body(apiResponse);
     }
-    @DeleteMapping("/delete/{id}")
-    public HttpEntity<?> deleteCategory(@PathVariable Long id){
-        ApiResponse apiResponse = categoryService.deleteCategory(id);
-        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 400).body(apiResponse);
-    }
+//    @DeleteMapping("/delete/{id}")
+//    public HttpEntity<?> deleteCategory(@PathVariable Long id){
+//        ApiResponse apiResponse = categoryService.deleteCategory(id);
+//        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 400).body(apiResponse);
+//    }
 }
