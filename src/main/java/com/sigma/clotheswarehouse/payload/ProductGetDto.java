@@ -15,6 +15,14 @@ public class ProductGetDto {
 
     private String name;
 
+    private String model;
+
+    private String code;
+
+    private String color;
+
+    private double seriaAmount;
+
     private double price;
 
     private double amount;

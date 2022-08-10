@@ -92,4 +92,15 @@ public class ProductService {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false, "PRODUCT_NOT_FOUND"));
     }
+
+    public HttpEntity<?> create(ProductDTO dto) {
+        if (dto.getCategoryId() != null && dto.getMeasurementId() != null) {
+            Product product = mapper.toEntity(dto);
+            return ResponseEntity.status(HttpStatus.OK).
+                    body(new ApiResponse
+                            (true, "PRODUCT_SAVED",
+                                    mapper.toDTO(repository.save(product))));
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false, "CATEGORY_OR_MEASUREMENT_NOT_FOUND"));
+    }
 }

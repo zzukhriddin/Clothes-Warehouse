@@ -33,6 +33,11 @@ public class ProductController {
         return productService.edit(id,dto);
     }
 
+    @PostMapping
+    public HttpEntity<?> create(@RequestBody ProductDTO dto){
+        return productService.create(dto);
+    }
+
     @DeleteMapping("/{id}")
     public HttpEntity<?> delete(@PathVariable UUID id){
         return productService.delete(id);
