@@ -30,8 +30,8 @@ public class MeasurementController {
     }
 
     @GetMapping("/getAll")
-    public HttpEntity<?> getAllMeasurement(@RequestBody MeasurementGetDto measurementGetDto){
-        ApiResponse apiResponse = measurementService.getAllMeasurement(measurementGetDto);
+    public HttpEntity<?> getAllMeasurement(){
+        ApiResponse apiResponse = measurementService.getAllMeasurement();
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 400).body(apiResponse);
     }
 

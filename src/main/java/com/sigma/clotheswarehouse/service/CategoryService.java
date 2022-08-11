@@ -6,24 +6,21 @@ import com.sigma.clotheswarehouse.payload.CategoryGetDto;
 import com.sigma.clotheswarehouse.payload.CategoryPostDto;
 import com.sigma.clotheswarehouse.payload.CategoryUpdateDto;
 import com.sigma.clotheswarehouse.repository.CategoryRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-
 @Service
+@RequiredArgsConstructor
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public CategoryService(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
-
     public ApiResponse addCategory(CategoryPostDto categoryPostDto) {
         Category category = new Category();
-        if (categoryRepository.existsByName(categoryPostDto.getName()).isPresent()){
+        if (categoryRepository.findByName(categoryPostDto.getName()).isPresent()){
             return new ApiResponse(false,"exist");
         }
         category.setName(categoryPostDto.getName());
@@ -59,8 +56,8 @@ public class CategoryService {
         if (!categoryRepository.existsById(id)){
             return new ApiResponse(false,"not available");
         }
-        if (categoryRepository.existsByIdAndName(id, categoryUpdateDto.getName()).isEmpty() &&
-                categoryRepository.existsByName(categoryUpdateDto.getName()).isPresent()){
+        if (categoryRepository.findByIdAndName(id, categoryUpdateDto.getName()).isEmpty() &&
+                categoryRepository.findByName(categoryUpdateDto.getName()).isPresent()){
             return new ApiResponse(false,"not available");
         }
         Category category = categoryRepository.findById(id).get();
@@ -69,7 +66,7 @@ public class CategoryService {
         return new ApiResponse(true,"available");
     }
 
-    public ApiResponse deleteCategory(Long id) {
-        return null;
-    }
+//    public ApiResponse deleteCategory(Long id) {
+//        return null;
+//    }
 }
