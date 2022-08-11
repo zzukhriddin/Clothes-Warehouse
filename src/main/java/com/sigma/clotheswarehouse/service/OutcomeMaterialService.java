@@ -81,7 +81,7 @@ public class OutcomeMaterialService {
         product.setPrice(outcomeMaterial.getProductOldPrice());
         product.setAmount(product.getAmount() - outcomeMaterial.getProductAmount());
         productRepo.save(product);
-        Optional<Product> optionalProduct = productRepo.findById(outcomeMaterialUpdateDTO.getProductId());
+        Optional<Product> optionalProduct = productRepo.findByIdAndDeletedFalse(outcomeMaterialUpdateDTO.getProductId());
         if (optionalProduct.isEmpty())
             return new ApiResponse(false, "Such a product does not exist");
         Product newProduct = optionalProduct.get();

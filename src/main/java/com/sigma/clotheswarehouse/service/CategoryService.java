@@ -6,11 +6,13 @@ import com.sigma.clotheswarehouse.payload.CategoryGetDto;
 import com.sigma.clotheswarehouse.payload.CategoryPostDto;
 import com.sigma.clotheswarehouse.payload.CategoryUpdateDto;
 import com.sigma.clotheswarehouse.repository.CategoryRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;

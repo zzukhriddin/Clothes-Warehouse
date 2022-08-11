@@ -9,8 +9,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ProductRepository extends JpaRepository<Product, UUID> {
-    @Override
-    Page<Product> findAll(Pageable pageable);
+    Page<Product> findAllByDeletedFalse(Pageable pageable);
+
+    Optional<Product> findByIdAndDeletedFalse(UUID uuid);
 
     Optional<Product> findByName(String name);
 }

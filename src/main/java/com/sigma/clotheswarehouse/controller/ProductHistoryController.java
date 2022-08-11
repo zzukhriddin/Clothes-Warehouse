@@ -16,17 +16,17 @@ public class ProductHistoryController {
 
     private final ProductHistoryService productHistoryService;
 
-    @GetMapping
+    @GetMapping("/getProductHistoryOneWeek")
     public HttpEntity<?> getProductHistoryOneWeek(){
         return productHistoryService.getOneWeek();
     }
 
-    @GetMapping
+    @GetMapping("/getProductHistoryOneMonth")
     public HttpEntity<?> getProductHistoryOneMonth(){
         return productHistoryService.getOneMonth();
     }
 
-    @GetMapping
+    @GetMapping("/getProductHistoryOneYear")
     public HttpEntity<?> getProductHistoryOneYear(){
         return productHistoryService.getOneYear();
     }

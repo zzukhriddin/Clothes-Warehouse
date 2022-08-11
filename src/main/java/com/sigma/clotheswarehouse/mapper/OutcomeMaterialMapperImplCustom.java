@@ -30,7 +30,7 @@ public class OutcomeMaterialMapperImplCustom implements OutcomeMaterialMapper {
 
         outcomeMaterial.setProductNewPrice(outcomeMaterialPostDTO.getProductPrice());
 
-        Optional<Product> optionalProduct = productRepo.findById(outcomeMaterialPostDTO.getProductId());
+        Optional<Product> optionalProduct = productRepo.findByIdAndDeletedFalse(outcomeMaterialPostDTO.getProductId());
         if (optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
             outcomeMaterial.setProductOldPrice(product.getPrice());

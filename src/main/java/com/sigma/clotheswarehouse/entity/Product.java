@@ -23,7 +23,7 @@ public class Product extends AbsEntity {
 
     private String color;
 
-    private double seriaAmount;
+    private Integer seriaAmount;
 
     @Column(nullable = false)
     private double price;
@@ -38,5 +38,5 @@ public class Product extends AbsEntity {
     private Category category;
 
     @Column(nullable = false)
-    private boolean deleted;
+    private boolean deleted = false;
 }
