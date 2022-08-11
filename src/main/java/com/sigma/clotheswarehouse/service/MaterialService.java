@@ -34,6 +34,9 @@ public class MaterialService {
 
     public ApiResponse addMaterial(MaterialPostDTO materialPostDTO) {
         Material material = materialMapper.toEntity(materialPostDTO);
+        Optional<Material> optionalMaterial = materialRepo.findByName(material.getName());
+        if (optionalMaterial.isPresent())
+            material = optionalMaterial.get();
         Measurement measurement = measurementMapper.toEntity(materialPostDTO.getMeasurementDTO());
         Optional<Measurement> optionalMeasurement = measurementRepository.findByName(measurement.getName());
         if (optionalMeasurement.isPresent())
@@ -47,7 +50,7 @@ public class MaterialService {
     public ApiResponse getAllMaterials(Integer page, Integer size) {
         Page<Material> materialPage;
         try {
-            materialPage = materialRepo.findAll(CommandUtils.simplePageable(page, size));
+            materialPage = materialRepo.findAllByDeletedIsFalse(CommandUtils.simplePageable(page, size));
         } catch (PageSizeException e) {
             return new ApiResponse(false, e.getMessage());
         }
