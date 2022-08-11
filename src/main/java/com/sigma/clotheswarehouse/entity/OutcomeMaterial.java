@@ -19,7 +19,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class OutcomeMaterial extends AbsUUID {
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     private List<ResourceForOutcomeMaterial> resources;
 
     @ManyToOne
