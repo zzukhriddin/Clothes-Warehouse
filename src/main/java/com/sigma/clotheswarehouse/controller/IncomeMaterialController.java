@@ -58,7 +58,7 @@ public class IncomeMaterialController {
         Timestamp startDateTimestamp = Timestamp.valueOf(localDate.atTime(LocalTime.MIDNIGHT));
         Timestamp endDateTimestamp = Timestamp.valueOf(localDate1.atTime(LocalTime.MIDNIGHT));
         ApiResponse apiResponse = incomeMaterialService.getIncomeMaterialsBetweenTimes(page, size, startDateTimestamp, endDateTimestamp);
-        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 400).body(apiResponse);
     }
 
 
