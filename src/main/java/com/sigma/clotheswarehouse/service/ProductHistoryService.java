@@ -60,36 +60,77 @@ public class ProductHistoryService {
     }
 
     public HttpEntity<?> create(ProductHistoryDTO productHistoryDTO) {
+        if (productHistoryDTO.getProductId() != null) {
+            Optional<Product> byId = productRepository.findById(productHistoryDTO.getProductId());
+            if (byId.isPresent()) {
+                Product product = byId.get();
+                if (product.getAmount() >= productHistoryDTO.getAmount()) {
+                    product.setAmount(product.getAmount() - productHistoryDTO.getAmount());
+                    productRepository.save(product);
+                } else {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                            (new ApiResponse(false, "NOT_ENOUGH_PRODUCT_QUANTITY")));
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body
+                        (new ApiResponse(false, "NOT_FOUND_PRODUCT"));
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body
+                    (new ApiResponse(false, "PRODUCT_ID_SHOULD_NOT_BE_NULL"));
+        }
         ProductHistory productHistory = mapper.toEntity(productHistoryDTO);
         ProductHistoryDTO savedProductHistory = mapper.toDTO(repository.save(productHistory));
 
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "PRODUCT_HISTORY_SAVED", savedProductHistory));
+        return ResponseEntity.status(HttpStatus.OK).body
+                (new ApiResponse(true, "PRODUCT_HISTORY_SAVED", savedProductHistory));
     }
 
     public HttpEntity<?> edit(UUID id, ProductHistoryDTO productHistoryDTO) {
-        if (productHistoryDTO.getProductId()!=null) {
+        //productHistory.getAmount va productHistoryDto.getAmount ning ayirmasidan qolgan son
+        double remaining = 0;
+
+        if (productHistoryDTO.getProductId() != null) {
             Optional<ProductHistory> productHistoryById = repository.findById(id);
+
             if (productHistoryById.isPresent()) {
-                Optional<Product> productRepositoryById = productRepository.findById(productHistoryDTO.getProductId());
+                ProductHistory productHistory = productHistoryById.get();
+
+                Optional<Product> productRepositoryById = productRepository.
+                        findByIdAndDeletedFalse(productHistoryDTO.getProductId());
+
                 if (productRepositoryById.isPresent()) {
+                    Product product = productRepositoryById.get();
+
+                    if (productHistory.getAmount() > productHistoryDTO.getAmount()) {
+                        remaining = productHistory.getAmount() - productHistoryDTO.getAmount();
+                        product.setAmount(product.getAmount() + remaining);
+                        productHistory.setAmount(productHistoryDTO.getAmount());
+                    } else {
+                        remaining = productHistoryDTO.getAmount() - productHistory.getAmount();
+                        if (product.getAmount() >= remaining) {
+                            product.setAmount(product.getAmount() - remaining);
+                            productHistory.setAmount(productHistoryDTO.getAmount());
+                        } else {
+                            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                                    (new ApiResponse(false, "NOT_ENOUGH_PRODUCT_QUANTITY")));
+                        }
+                    }
                     Optional<Client> clientRepositoryById = clientRepository.findById(productHistoryDTO.getClientId());
                     if (clientRepositoryById.isPresent()) {
-                        ProductHistory productHistory = productHistoryById.get();
                         Client client = clientRepositoryById.get();
-                        Product product = productRepositoryById.get();
                         productHistory.setProduct(product);
                         productHistory.setClient(client);
-                        productHistory.setAmount(productHistory.getAmount());
-                        productHistory.setPrice(productHistory.getPrice());
+                        productHistory.setPrice(productHistoryDTO.getPrice());
                         ProductHistoryGetDTO historyDTO = mapper.toGetDTO(repository.save(productHistory));
-                        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true,"EDITED_PRODUCT_HISTORY",historyDTO));
+                        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "EDITED_PRODUCT_HISTORY", historyDTO));
                     }
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false,"NOT_FOUND_CLIENT"));
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(false, "NOT_FOUND_CLIENT"));
                 }
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false,"NOT_FOUND_PRODUCT"));
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(false, "NOT_FOUND_PRODUCT"));
             }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false,"NOT_FOUND_PRODUCT_HISTORY"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(false, "NOT_FOUND_PRODUCT_HISTORY"));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false,"NOT_FOUND_PRODUCT_HISTORY"));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(false, "NOT_FOUND_PRODUCT_HISTORY"));
     }
 }

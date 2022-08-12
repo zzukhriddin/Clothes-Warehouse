@@ -18,7 +18,7 @@ public class ProductDTO {
 
     private String color;
 
-    private double seriaAmount;
+    private Integer seriaAmount;
 
     private double price;
 
@@ -28,6 +28,6 @@ public class ProductDTO {
 
     private Long categoryId;
 
-    private boolean deleted;
+    private boolean deleted = false;
 }
 

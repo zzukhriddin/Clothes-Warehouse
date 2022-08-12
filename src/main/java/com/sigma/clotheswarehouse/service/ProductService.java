@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,23 +35,23 @@ public class ProductService {
 
     public HttpEntity<?> getAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Product> productPage = repository.findAll(pageable);
+        Page<Product> productPage = repository.findAllByDeletedFalse(pageable);
         List<ProductGetDto> DTOs = mapper.getDTOs(productPage.toList());
         return ResponseEntity.ok(DTOs);
     }
 
     public HttpEntity<?> getById(UUID id) {
-        Optional<Product> optionalProduct = repository.findById(id);
+        Optional<Product> optionalProduct = repository.findByIdAndDeletedFalse(id);
         if (optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
             ProductGetDto productGetDto = mapper.getDTO(product);
             return ResponseEntity.status(200).body(productGetDto);
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false, "PRODUCT_NOT_FOUND"));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(false, "PRODUCT_NOT_FOUND"));
     }
 
     public HttpEntity<?> edit(UUID id, ProductDTO dto) {
-        Optional<Product> optionalProduct = repository.findById(id);
+        Optional<Product> optionalProduct = repository.findByIdAndDeletedFalse(id);
         if (optionalProduct.isPresent()) {
             if (dto.getMeasurementId() != null) {
                 Optional<Measurement> optionalMeasurement = measurementRepository.findById(dto.getMeasurementId());
@@ -70,27 +69,29 @@ public class ProductService {
                         product.setCategory(category);
                         product.setModel(dto.getModel());
                         product.setCode(dto.getCode());
+                        product.setColor(dto.getColor());
+                        product.setSeriaAmount(dto.getSeriaAmount());
                         ProductGetDto productGetDto = mapper.getDTO(repository.save(product));
                         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "PRODUCT_EDITED", productGetDto));
                     }
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false, "CATEGORY_NOT_FOUND"));
+                    return ResponseEntity.status(400).body(new ApiResponse(false, "CATEGORY_NOT_FOUND"));
                 }
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false, "MEASUREMENT_NOT_FOUND"));
+                return ResponseEntity.status(400).body(new ApiResponse(false, "MEASUREMENT_NOT_FOUND"));
             }
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false, "PRODUCT_NOT_FOUND"));
+        return ResponseEntity.status(400).body(new ApiResponse(false, "PRODUCT_NOT_FOUND"));
     }
 
 
     public HttpEntity<?> delete(UUID id) {
-        Optional<Product> optionalProduct = repository.findById(id);
+        Optional<Product> optionalProduct = repository.findByIdAndDeletedFalse(id);
         if (optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
             product.setDeleted(true);
             repository.save(product);
             return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "PRODUCT_DELETED"));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false, "PRODUCT_NOT_FOUND"));
+        return ResponseEntity.status(400).body(new ApiResponse(false, "PRODUCT_NOT_FOUND"));
     }
 
     public HttpEntity<?> create(ProductDTO dto) {
@@ -101,6 +102,6 @@ public class ProductService {
                             (true, "PRODUCT_SAVED",
                                     mapper.toDTO(repository.save(product))));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false, "CATEGORY_OR_MEASUREMENT_NOT_FOUND"));
+        return ResponseEntity.status(400).body(new ApiResponse(false, "CATEGORY_OR_MEASUREMENT_NOT_FOUND"));
     }
 }
