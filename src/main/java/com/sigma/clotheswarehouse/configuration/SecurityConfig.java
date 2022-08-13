@@ -39,7 +39,7 @@ public class SecurityConfig {
     public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors()
-                .and()
+                .disable()
                 .csrf()
                 .disable()
                 .sessionManagement()
