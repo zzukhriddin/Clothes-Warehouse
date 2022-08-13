@@ -12,6 +12,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(AppConstant.BASE_PATH + "/product")
 @RequiredArgsConstructor
+@CrossOrigin(maxAge = 3600)
 public class ProductController {
 
     private final ProductService productService;

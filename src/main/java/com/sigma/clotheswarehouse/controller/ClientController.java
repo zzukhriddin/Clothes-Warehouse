@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(AppConstant.BASE_PATH + "/client")
+@CrossOrigin(maxAge = 3600)
 public class ClientController {
 
     private final ClientService clientService;
