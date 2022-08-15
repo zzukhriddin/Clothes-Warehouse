@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,5 +14,4 @@ public class ClientUpdateDto {
     private String fio;
     private String phoneNumber;
     private String address;
-    private boolean deleted;
 }

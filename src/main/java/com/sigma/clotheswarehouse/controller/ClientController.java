@@ -49,4 +49,5 @@ public class ClientController {
         ApiResponse apiResponse = clientService.deleteClient(id);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 400).body(apiResponse);
     }
+
 }
